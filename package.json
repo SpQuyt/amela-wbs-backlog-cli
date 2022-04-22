@@ -26,10 +26,12 @@
     "clui": "^0.3.6",
     "colors": "^1.4.0",
     "configstore": "^6.0.0",
+    "dayjs": "^1.11.1",
     "figlet": "^1.5.0",
     "inquirer": "^8.1.1",
     "lodash": "^4.17.21",
     "minimist": "^1.2.5",
+    "node-fetch": "^3.2.3",
     "package-json": "^6.5.0",
     "prompt": "^1.1.0",
     "semver": "^7.3.5",
@@ -58,9 +60,10 @@
   },
   "jest": {
     "moduleFileExtensions": [
-        "js",
-        "json",
-        "node"
+      "js",
+      "json",
+      "node"
     ]
-  }
+  },
+  "type": "module"
 }
