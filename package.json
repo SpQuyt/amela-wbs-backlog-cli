@@ -1,0 +1,66 @@
+{
+  "name": "amela-wbs-backlog-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint-fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SpQuyt/amela-wbs-backlog-cli.git"
+  },
+  "author": "SpQuyt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SpQuyt/amela-wbs-backlog-cli/issues"
+  },
+  "homepage": "https://github.com/SpQuyt/amela-wbs-backlog-cli#readme",
+  "dependencies": {
+    "boxen": "^5.0.1",
+    "chalk": "^4.1.1",
+    "clear": "^0.1.0",
+    "clui": "^0.3.6",
+    "colors": "^1.4.0",
+    "configstore": "^6.0.0",
+    "figlet": "^1.5.0",
+    "inquirer": "^8.1.1",
+    "lodash": "^4.17.21",
+    "minimist": "^1.2.5",
+    "package-json": "^6.5.0",
+    "prompt": "^1.1.0",
+    "semver": "^7.3.5",
+    "semver-diff": "^3.1.1",
+    "sharp": "^0.28.3",
+    "simple-git": "^2.40.0",
+    "touch": "^3.1.0",
+    "yargs": "^17.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^7.0.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jsdoc": "^32.3.0",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-unused-imports": "^1.1.1",
+    "husky": "^6.0.0",
+    "jest": "^26.6.3"
+  },
+  "bin": {
+    "amela-wbs": "./index.js"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+        "js",
+        "json",
+        "node"
+    ]
+  }
+}
