@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@apis/*": [
+                "./apis/*"
+            ],
+            "@components/*": [
+                "./components/*"
+            ],
+            "@features/*": [
+                "./features/*"
+            ],
+            "@utils/*": [
+                "./utils/*"
+            ]
+        }
+    },
+    "include": ["./apis/*", "./components/*", "./features/*", "./utils/*"]
+}

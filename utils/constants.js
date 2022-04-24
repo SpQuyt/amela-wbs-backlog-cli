@@ -31,4 +31,7 @@ export const fakeData = [
   },
 ];
 
-export const temp = null;
+export const YesNoTextType = {
+  YES: 'Yes',
+  NO: 'No',
+};
