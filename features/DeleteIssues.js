@@ -3,10 +3,10 @@
 /* eslint-disable no-restricted-syntax */
 
 import open from 'open';
-import Project from '@apis/Project.js';
-import Issue from '@apis/Issue.js';
-import Questions from '@components/Questions.js';
-import { YesNoTextType } from '@utils/constants.js';
+import Project from '../apis/Project.js';
+import Issue from '../apis/Issue.js';
+import Questions from '../components/Questions.js';
+import { YesNoTextType } from '../utils/constants.js';
 
 const exec = async () => {
   try {

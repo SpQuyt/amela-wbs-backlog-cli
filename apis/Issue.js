@@ -6,29 +6,33 @@ import fetch from 'node-fetch';
 const addItemToRemote = async ({
   spaceId, apiKey, taskItem, issueTypesJSON, priorityTypesJSON, categoriesTypeFromRemoteJSON, currentProjectId,
 }) => {
-  const {
-    summary, categoryTypeArr, issueType, priorityType, startDate, dueDate,
-  } = taskItem;
-  const defaultIssueId = issueTypesJSON?.find((issItem) => issItem.name === 'Task')?.id;
-  const issueTypeId = issueTypesJSON?.find((issItem) => issItem.name === issueType)?.id;
-  const defaultPriorityId = priorityTypesJSON?.find((priItem) => priItem.name === 'Normal')?.id;
-  const priorityId = priorityTypesJSON?.find((priItem) => priItem.name === priorityType)?.id;
-  const categoryId = categoryTypeArr?.map((taskItemCageItem) => categoriesTypeFromRemoteJSON?.find((cateItemRemote) => taskItemCageItem === cateItemRemote?.name)?.id);
-  const bodyTask = {
-    projectId: currentProjectId,
-    summary,
-    issueTypeId: issueTypeId || defaultIssueId,
-    priorityId: priorityId || defaultPriorityId,
-    categoryId,
-    startDate: dayjs(startDate).format('YYYY-MM-DD'),
-    dueDate: dayjs(dueDate).format('YYYY-MM-DD'),
-  };
-  await fetch(`https://${spaceId}.backlog.com/api/v2/issues?apiKey=${apiKey}`, {
-    method: 'POST',
-    body: JSON.stringify(bodyTask),
-    headers: { 'Content-Type': 'application/json' },
-  });
-  console.log(`Adding task ${bodyTask.summary}...`);
+  try {
+    const {
+      summary, categoryTypeArr, issueType, priorityType, startDate, dueDate,
+    } = taskItem;
+    const defaultIssueId = issueTypesJSON?.find((issItem) => issItem.name === 'Task')?.id;
+    const issueTypeId = issueTypesJSON?.find((issItem) => issItem.name === issueType)?.id;
+    const defaultPriorityId = priorityTypesJSON?.find((priItem) => priItem.name === 'Normal')?.id;
+    const priorityId = priorityTypesJSON?.find((priItem) => priItem.name === priorityType)?.id;
+    const categoryId = categoryTypeArr?.map((taskItemCageItem) => categoriesTypeFromRemoteJSON?.find((cateItemRemote) => taskItemCageItem === cateItemRemote?.name)?.id);
+    const bodyTask = {
+      projectId: currentProjectId,
+      summary,
+      issueTypeId: issueTypeId || defaultIssueId,
+      priorityId: priorityId || defaultPriorityId,
+      categoryId,
+      startDate: dayjs(startDate).format('YYYY-MM-DD'),
+      dueDate: dayjs(dueDate).format('YYYY-MM-DD'),
+    };
+    await fetch(`https://${spaceId}.backlog.com/api/v2/issues?apiKey=${apiKey}`, {
+      method: 'POST',
+      body: JSON.stringify(bodyTask),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    console.log(`Adding task ${bodyTask.summary}...`);
+  } catch (err) {
+    console.log(`Error in adding tasks remotely ${err}`);
+  }
 };
 
 const addListToRemote = async () => {};

@@ -35,3 +35,28 @@ export const YesNoTextType = {
   YES: 'Yes',
   NO: 'No',
 };
+
+export const ExcelConst = {
+  COL_START_INDEX: 1,
+  ROW_START_INDEX: 3,
+  COL_LEVEL_1_INDEX: 2,
+  COL_LEVEL_2_INDEX: 3,
+  COL_LEVEL_3_INDEX: 4,
+  COL_LEVEL_4_INDEX: 5,
+  COL_START_DATE_INDEX: 6,
+  COL_END_DATE_INDEX: 7,
+};
+
+export const ExcelColName = {
+  0: 'A',
+  1: 'B',
+  2: 'C',
+  3: 'D',
+  4: 'E',
+  5: 'F',
+  6: 'G',
+  7: 'H',
+  8: 'I',
+  9: 'J',
+  10: 'K',
+};

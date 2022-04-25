@@ -23,9 +23,24 @@ const addListToRemote = async ({
   }
 };
 
+const deleteListRemote = async ({
+  spaceId, apiKey, currentProjectId,
+}) => {
+  const listCategoriesFromRemoteRes = await fetch(`https://${spaceId}.backlog.com/api/v2/projects/${currentProjectId}/categories?apiKey=${apiKey}`);
+  const listCategoriesFromRemoteJSON = await listCategoriesFromRemoteRes.json();
+  for (const categoryFromRemote of listCategoriesFromRemoteJSON) {
+    await fetch(`https://${spaceId}.backlog.com/api/v2/projects/${currentProjectId}/categories/${categoryFromRemote?.id}?apiKey=${apiKey}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    console.log(`Deleting category ${categoryFromRemote.name}...`);
+  }
+};
+
 const Category = {
   getListRemote,
   addListToRemote,
+  deleteListRemote,
 };
 
 export default Category;

@@ -12,15 +12,6 @@
         "ecmaVersion": 12
     },
     "rules": {
-        "max-len": 0,
-        "import/no-unresolved": "off"
-    },
-    "settings": {
-        "import/resolver": {
-          "node": {
-            "extensions": [".js", ".jsx", ".json"],
-            "moduleDirectory": ["./apis/", "./components/", "./features/"]
-          }
-        }
+        "max-len": 0
     }
 }

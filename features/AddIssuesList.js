@@ -1,15 +1,20 @@
+/* eslint-disable spaced-comment */
+
 /* eslint-disable import/extensions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+//@ts-check
 
 import open from 'open';
-import { fakeData, YesNoTextType } from '@utils/constants.js';
-import Category from '@apis/Category.js';
-import IssueType from '@apis/IssueType.js';
-import Priority from '@apis/Priority.js';
-import Project from '@apis/Project.js';
-import Questions from '@components/Questions.js';
-import Issue from '@apis/Issue.js';
+import { YesNoTextType } from '../utils/constants.js';
+import Category from '../apis/Category.js';
+import IssueType from '../apis/IssueType.js';
+import Priority from '../apis/Priority.js';
+import Project from '../apis/Project.js';
+import Questions from '../components/Questions.js';
+import Issue from '../apis/Issue.js';
+import Excel from '../components/Excel.js';
+import { sleep } from '../utils/helpers.js';
 
 const exec = async () => {
   try {
@@ -33,25 +38,37 @@ const exec = async () => {
       return;
     }
 
-    // Get categories type (Design, Mobile, API, CMS) - from Excel
+    // Get file excel name
+    const dataFromExcel = Excel.getDataFromFile('Ticket_WBS_Comparison.xlsx');
+    if (!dataFromExcel) {
+      console.log('Error in reading data from excel!');
+      return;
+    }
+    // Get categories type - from Excel
+    // Delete old from remote
     // Then add categories type to remote project
-    const categoriesTypeExcel = ['Requirement', 'Design', 'Mobile', 'API', 'CMS'];
+    const categoriesTypeExcel = dataFromExcel.categories;
+    await Category.deleteListRemote({ spaceId, apiKey, currentProjectId });
+    await sleep(1000);
     await Category.addListToRemote({
       categoriesTypeExcel, spaceId, apiKey, currentProjectId,
     });
+    await sleep(500);
 
-    // Get categories type (Design, Mobile, API, CMS) - from Remote
+    // Get categories type - from Remote
     const categoriesTypeFromRemoteJSON = await Category.getListRemote({ spaceId, apiKey, currentProjectId });
 
     // Get list issue-types from remote project
     const issueTypesJSON = await IssueType.getListRemote({ spaceId, apiKey, currentProjectId });
+    await sleep(500);
 
     // Get list priorities-types from remote project
     const priorityTypesJSON = await Priority.getListRemote({ spaceId, apiKey });
+    await sleep(500);
 
     // Get list tasks from Excel
-    // fakeData for simulation
-    for (const taskItem of fakeData) {
+    for (const taskItem of dataFromExcel?.allData?.filter((_, index) => index < 30)) {
+      await sleep(2000);
       await Issue.addItemToRemote({
         spaceId,
         apiKey,

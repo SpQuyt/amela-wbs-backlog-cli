@@ -5,7 +5,7 @@ import 'dotenv/config';
 
 const askSpaceId = async () => {
   const listQuestion = [
-    'Backlog \'s SpaceId (default: spquyt)',
+    `Backlog 's SpaceId (default: ${process.env.DEFAULT_SPACE_ID})`,
   ];
   const result = await CustomPromise.promptGetListQuestionPromise(
     listQuestion,
