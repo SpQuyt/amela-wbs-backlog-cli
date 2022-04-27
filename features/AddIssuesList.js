@@ -39,7 +39,8 @@ const exec = async () => {
     }
 
     // Get file excel name
-    const dataFromExcel = Excel.getDataFromFile('Ticket_WBS_Comparison.xlsx');
+    const excelFileName = await Questions.askExcelFileName();
+    const dataFromExcel = Excel.getDataFromFile(excelFileName);
     if (!dataFromExcel) {
       console.log('Error in reading data from excel!');
       return;
@@ -67,8 +68,7 @@ const exec = async () => {
     await sleep(500);
 
     // Get list tasks from Excel
-    for (const taskItem of dataFromExcel?.allData?.filter((_, index) => index < 30)) {
-      await sleep(2000);
+    for (const taskItem of dataFromExcel?.allData) {
       await Issue.addItemToRemote({
         spaceId,
         apiKey,
@@ -77,7 +77,9 @@ const exec = async () => {
         priorityTypesJSON,
         categoriesTypeFromRemoteJSON,
         currentProjectId,
+        taskIndex: dataFromExcel?.allData?.indexOf(taskItem),
       });
+      await sleep(1000);
     }
   } catch (err) {
     console.log('err: ', err);

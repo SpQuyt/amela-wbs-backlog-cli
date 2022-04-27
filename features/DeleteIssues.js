@@ -2,29 +2,21 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 
-import open from 'open';
 import Project from '../apis/Project.js';
 import Issue from '../apis/Issue.js';
-import Questions from '../components/Questions.js';
-import { YesNoTextType } from '../utils/constants.js';
 
 const exec = async () => {
   try {
     // Get spaceId + apiKey - from Input
-    const spaceId = await Questions.askSpaceId();
-    if (!spaceId) return;
-    const yesNoApiKey = await Questions.askYesNoApiKey();
-    if (yesNoApiKey === YesNoTextType.NO) {
-      open(`https://${spaceId}.backlog.com/EditApiSettings.action`);
-    }
-    const apiKey = await Questions.askApiKey();
+    const spaceId = process.env.DEFAULT_SPACE_ID;
+    const apiKey = process.env.DEFAULT_API_KEY;
 
     // Get projects list
     const simpleProjectsList = await Project.getListRemote({ spaceId, apiKey });
     console.log(simpleProjectsList);
 
     // Get chosen project - from Input
-    const currentProjectName = await Questions.askProjectName();
+    const currentProjectName = process.env.DEFAULT_PROJECT_NAME;
     const currentProjectId = simpleProjectsList.find((prItem) => prItem?.name === currentProjectName)?.id;
     if (currentProjectId === undefined) {
       return;

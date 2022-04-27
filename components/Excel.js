@@ -4,6 +4,7 @@
 import XLSX from 'xlsx';
 import fs from 'fs';
 import dayjs from 'dayjs';
+import chalk from 'chalk';
 import { ExcelConst } from '../utils/constants.js';
 import { convertRowColToCell } from '../utils/helpers.js';
 
@@ -84,7 +85,12 @@ const getDataEachColumn = ({ workSheet, workSheetMergeData, currentColIndex }) =
 };
 
 const getDataFromFile = (filePath) => {
-  if (!isFileExisted(filePath)) return undefined;
+  if (!isFileExisted(filePath)) {
+    console.log(chalk.red(
+      'Error file excel not found!',
+    ));
+    return undefined;
+  }
   const workBook = XLSX.readFile(filePath);
   const workSheet = workBook.Sheets.WBS_Estimation_and_Actual;
   const workSheetMergeData = workSheet['!merges'];

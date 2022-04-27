@@ -45,11 +45,22 @@ const askProjectName = async () => {
   return result[listQuestion[0]] || process.env.DEFAULT_PROJECT_NAME;
 };
 
+const askExcelFileName = async () => {
+  const listQuestion = [
+    'Excel\'s File name',
+  ];
+  const result = await CustomPromise.promptGetListQuestionPromise(
+    listQuestion,
+  );
+  return result[listQuestion[0]] || process.env.DEFAULT_EXCEL_FILE;
+};
+
 const Questions = {
   askSpaceId,
   askYesNoApiKey,
   askApiKey,
   askProjectName,
+  askExcelFileName,
 };
 
 export default Questions;

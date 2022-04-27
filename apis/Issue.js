@@ -1,10 +1,13 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable import/extensions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 import dayjs from 'dayjs';
 import fetch from 'node-fetch';
+import { sleep } from '../utils/helpers.js';
 
 const addItemToRemote = async ({
-  spaceId, apiKey, taskItem, issueTypesJSON, priorityTypesJSON, categoriesTypeFromRemoteJSON, currentProjectId,
+  spaceId, apiKey, taskItem, issueTypesJSON, priorityTypesJSON, categoriesTypeFromRemoteJSON, currentProjectId, taskIndex,
 }) => {
   try {
     const {
@@ -24,12 +27,23 @@ const addItemToRemote = async ({
       startDate: dayjs(startDate).format('YYYY-MM-DD'),
       dueDate: dayjs(dueDate).format('YYYY-MM-DD'),
     };
-    await fetch(`https://${spaceId}.backlog.com/api/v2/issues?apiKey=${apiKey}`, {
-      method: 'POST',
-      body: JSON.stringify(bodyTask),
-      headers: { 'Content-Type': 'application/json' },
-    });
-    console.log(`Adding task ${bodyTask.summary}...`);
+    let resAddIssue;
+    let resAddIssueJSON;
+    let countTrying = 0;
+    while (resAddIssueJSON?.summary === undefined) {
+      if (countTrying > 0) {
+        console.log(`----Retrying adding task ${bodyTask?.summary}, count: ${countTrying}`);
+        await sleep(7000);
+      }
+      countTrying++;
+      resAddIssue = await fetch(`https://${spaceId}.backlog.com/api/v2/issues?apiKey=${apiKey}`, {
+        method: 'POST',
+        body: JSON.stringify(bodyTask),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      resAddIssueJSON = await resAddIssue.json();
+    }
+    console.log(`Added task number ${taskIndex + 1}: ${resAddIssueJSON?.summary}...`);
   } catch (err) {
     console.log(`Error in adding tasks remotely ${err}`);
   }
@@ -40,15 +54,34 @@ const addListToRemote = async () => {};
 const deleteListRemote = async ({
   spaceId, apiKey, currentProjectId,
 }) => {
-  const listIssuesFromRemoteAllRes = await fetch(`https://${spaceId}.backlog.com/api/v2/issues?apiKey=${apiKey}`);
-  const listIssuesFromRemoteAllJSON = await listIssuesFromRemoteAllRes.json();
-  const listIssuesFromRemote = listIssuesFromRemoteAllJSON?.filter((issueItem) => issueItem?.projectId === currentProjectId);
-  for (const issueFromRemote of listIssuesFromRemote) {
-    await fetch(`https://${spaceId}.backlog.com/api/v2/issues/${issueFromRemote?.id}?apiKey=${apiKey}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    console.log(`Deleting task ${issueFromRemote.summary}...`);
+  let listIssuesFromRemoteAllRes = await fetch(`https://${spaceId}.backlog.com/api/v2/issues?apiKey=${apiKey}`);
+  let listIssuesFromRemoteAllJSON = await listIssuesFromRemoteAllRes.json();
+  let listIssuesFromRemote = listIssuesFromRemoteAllJSON?.filter((issueItem) => issueItem?.projectId === currentProjectId);
+  let multipleNumber = 1;
+  while (listIssuesFromRemote?.length > 0) {
+    for (const issueFromRemote of listIssuesFromRemote) {
+      await sleep(1500);
+      let resAddIssue;
+      let resAddIssueJSON;
+      let countTrying = 0;
+      while (resAddIssueJSON?.summary === undefined) {
+        if (countTrying > 0) {
+          console.log(`----Retrying count: ${countTrying}`);
+          await sleep(7000);
+        }
+        countTrying++;
+        resAddIssue = await fetch(`https://${spaceId}.backlog.com/api/v2/issues/${issueFromRemote?.id}?apiKey=${apiKey}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        resAddIssueJSON = await resAddIssue.json();
+      }
+      console.log(`Deleted task number ${[listIssuesFromRemote?.indexOf(issueFromRemote) + 1] * multipleNumber}: ${issueFromRemote?.summary}...`);
+    }
+    listIssuesFromRemoteAllRes = await fetch(`https://${spaceId}.backlog.com/api/v2/issues?apiKey=${apiKey}`);
+    listIssuesFromRemoteAllJSON = await listIssuesFromRemoteAllRes.json();
+    listIssuesFromRemote = listIssuesFromRemoteAllJSON?.filter((issueItem) => issueItem?.projectId === currentProjectId);
+    multipleNumber++;
   }
 };
 
